@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <title>Moana Marker AR</title>
 
-    <!-- MindAR + A-Frame -->
+    <!-- A-Frame & MindAR -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/aframe/mindar-aframe.prod.js"></script>
-    <!-- Snapshot support -->
+    <!-- Snapshot tool -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
@@ -16,41 +16,31 @@
         overflow: hidden;
       }
 
-      #startButton, #snapshotButton {
+      #snapshotBtn {
         position: fixed;
+        bottom: 20px;
+        right: 20px;
         z-index: 9999;
         padding: 12px 18px;
         font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        color: white;
-        cursor: pointer;
-      }
-
-      #startButton {
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #2196f3;
-      }
-
-      #snapshotButton {
-        bottom: 20px;
-        right: 20px;
         background-color: #e91e63;
-        display: none;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
       }
     </style>
   </head>
 
   <body>
-    <button id="startButton">▶ Start AR</button>
-    <button id="snapshotButton">📸 Capture</button>
+    <!-- Snapshot Button -->
+    <button id="snapshotBtn">📸 Capture</button>
 
+    <!-- MindAR Scene -->
     <a-scene
-      mindar-image="imageTargetSrc: mind.mind; autoStart: false;"
-      embedded
+      mindar-image="imageTargetSrc: mind.mind; autoStart: true;"
       color-space="sRGB"
+      embedded
       renderer="colorManagement: true, physicallyCorrectLights"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
@@ -61,6 +51,7 @@
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+      <!-- Image marker target -->
       <a-entity mindar-image-target="targetIndex: 0">
         <a-gltf-model
           src="#moana"
@@ -71,19 +62,10 @@
       </a-entity>
     </a-scene>
 
+    <!-- Snapshot Function -->
     <script>
-      const startButton = document.getElementById("startButton");
-      const snapshotButton = document.getElementById("snapshotButton");
-
-      startButton.addEventListener("click", () => {
-        const sceneEl = document.querySelector("a-scene");
-        sceneEl.components["mindar-image"].start().then(() => {
-          startButton.style.display = "none";
-          snapshotButton.style.display = "block";
-        });
-      });
-
-      snapshotButton.addEventListener("click", () => {
+      const snapshotBtn = document.getElementById("snapshotBtn");
+      snapshotBtn.addEventListener("click", () => {
         html2canvas(document.body).then((canvas) => {
           const link = document.createElement("a");
           link.download = "moana_ar_snapshot.png";
