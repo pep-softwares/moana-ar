@@ -1,47 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8">
     <title>Moana AR</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.3.2/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-      #snapBtn {
+      #captureButton {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        padding: 10px 15px;
-        background-color: #e91e63;
+        padding: 12px 20px;
+        background: #e91e63;
         color: white;
-        border: none;
-        border-radius: 10px;
         font-size: 16px;
+        border: none;
+        border-radius: 8px;
         z-index: 999;
       }
     </style>
   </head>
   <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs>
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+    >
       <a-assets>
         <a-asset-item id="moanaModel" src="moana.glb"></a-asset-item>
       </a-assets>
 
-      <a-entity gltf-model="#moanaModel" position="0 0 0" scale="1 1 1"></a-entity>
+      <!-- 3D Model -->
+      <a-entity
+        gltf-model="#moanaModel"
+        position="0 0 0"
+        scale="0.5 0.5 0.5"
+        rotation="0 180 0"
+      ></a-entity>
+
       <a-camera-static></a-camera-static>
     </a-scene>
 
-    <button id="snapBtn">📸 Capture</button>
+    <!-- Snapshot Button -->
+    <button id="captureButton">📸 Capture</button>
 
     <script>
-      document.getElementById('snapBtn').addEventListener('click', () => {
-        html2canvas(document.body).then(canvas => {
-          let link = document.createElement('a');
-          link.download = 'Moana_AR_Snapshot.png';
+      document.getElementById("captureButton").onclick = function () {
+        html2canvas(document.body).then(function (canvas) {
+          let link = document.createElement("a");
+          link.download = "moana-ar-snapshot.png";
           link.href = canvas.toDataURL();
           link.click();
         });
-      });
+      };
     </script>
   </body>
 </html>
