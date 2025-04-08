@@ -1,87 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Moana AR Viewer</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Moana Marker AR</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/aframe/mindar-aframe.prod.js"></script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      #startButton {
+        position: fixed;
+        z-index: 999;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 20px;
+        font-size: 16px;
+        background: #f50057;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="startButton">▶ Start AR</button>
 
-    model-viewer {
-      width: 100vw;
-      height: 100vh;
-    }
+    <a-scene
+      mindar-image="imageTargetSrc: targets.mind; autoStart: false"
+      embedded
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-assets>
+        <a-asset-item id="moana" src="moana_3d_model.glb"></a-asset-item>
+      </a-assets>
 
-    #ar-button {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background-color: #ff4081;
-      color: white;
-      font-size: 16px;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      z-index: 999;
-      display: none;
-    }
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    #snapshot {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #673ab7;
-      color: white;
-      font-size: 16px;
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      z-index: 999;
-    }
-  </style>
-</head>
-<body>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-gltf-model
+          src="#moana"
+          position="0 0 0"
+          scale="0.4 0.4 0.4"
+          rotation="0 0 0"
+        ></a-gltf-model>
+      </a-entity>
+    </a-scene>
 
-<model-viewer
-  id="moana"
-  src="moana_3d_model.glb"
-  ios-src="moana.usdz"
-  ar
-  ar-modes="scene-viewer webxr quick-look"
-  scale="10 10 10"
-  camera-controls
-  auto-rotate
-  shadow-intensity="1"
-  exposure="1"
-  alt="Moana 3D model"
-></model-viewer>
-
-<button id="snapshot">📸 Capture</button>
-
-<script>
-  const snapshotBtn = document.getElementById("snapshot");
-  const viewer = document.querySelector("model-viewer");
-
-  snapshotBtn.addEventListener("click", () => {
-    viewer.toBlob().then((blob) => {
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "moana-snapshot.png";
-      link.click();
-    });
-  });
-
-  // Show AR button only on supported devices
-  window.addEventListener("load", () => {
-    if (viewer.canActivateAR) {
-      viewer.activateAR();
-    }
-  });
-</script>
-
-</body>
+    <script>
+      document.querySelector("#startButton").addEventListener("click", () => {
+        document.querySelector("a-scene").components["mindar-image"].start();
+        document.querySelector("#startButton").style.display = "none";
+      });
+    </script>
+  </body>
 </html>
