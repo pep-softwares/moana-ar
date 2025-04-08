@@ -55,7 +55,7 @@
 
     <!-- MindAR Scene -->
     <a-scene
-      mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
+      mindar-image="imageTargetSrc: mind.mind; autoStart: false;"
       color-space="sRGB"
       embedded
       renderer="colorManagement: true, physicallyCorrectLights"
@@ -63,7 +63,7 @@
       device-orientation-permission-ui="enabled: false"
     >
       <a-assets>
-        <a-asset-item id="moana" src="moana_3d_model.glb"></a-asset-item>
+        <a-asset-item id="moana" src="moana.glb"></a-asset-item>
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -100,4 +100,5 @@
         });
       });
     </script>
-  </
+  </body>
+</html>
