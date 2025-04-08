@@ -1,59 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Moana AR Experience</title>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #f0f0f0;
-      }
-      #snapshot {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 15px;
-        background-color: #e91e63;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <model-viewer
-      id="moanaModel"
-      src="moana_3d_model.glb"
-      alt="Moana 3D Model"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      camera-controls
-      auto-rotate
-      style="width: 100%; height: 100vh;"
-    >
-      <button id="snapshot">📸 Capture</button>
-    </model-viewer>
+<head>
+  <meta charset="UTF-8" />
+  <title>Moana AR Viewer</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
 
-    <script>
-      const modelViewer = document.querySelector("#moanaModel");
-      const snapshotButton = document.querySelector("#snapshot");
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+    }
 
-      snapshotButton.addEventListener("click", () => {
-        modelViewer.toBlob((blob) => {
-          const img = document.createElement("a");
-          img.href = URL.createObjectURL(blob);
-          img.download = "moana-snapshot.png";
-          img.click();
-        });
-      });
-    </script>
-  </body>
+    #ar-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #ff4081;
+      color: white;
+      font-size: 16px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      z-index: 999;
+      display: none;
+    }
+
+    #snapshot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #673ab7;
+      color: white;
+      font-size: 16px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+<model-viewer
+  id="moana"
+  src="moana_3d_model.glb"
+  ar
+  ar-modes="scene-viewer webxr quick-look"
+  camera-controls
+  auto-rotate
+  shadow-intensity="1"
+  exposure="1"
+  alt="Moana 3D model"
+></model-viewer>
+
+<button id="snapshot">📸 Capture</button>
+
+<script>
+  const snapshotBtn = document.getElementById("snapshot");
+  const viewer = document.querySelector("model-viewer");
+
+  snapshotBtn.addEventListener("click", () => {
+    viewer.toBlob().then((blob) => {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "moana-snapshot.png";
+      link.click();
+    });
+  });
+
+  // Show AR button only on supported devices
+  window.addEventListener("load", () => {
+    if (viewer.canActivateAR) {
+      viewer.activateAR();
+    }
+  });
+</script>
+
+</body>
 </html>
