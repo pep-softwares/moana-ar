@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title>Moana AR</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>Moana AR Experience</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-      #captureButton {
+      body {
+        margin: 0;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      #snapshot {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        padding: 12px 20px;
-        background: #e91e63;
+        padding: 10px 15px;
+        background-color: #e91e63;
         color: white;
-        font-size: 16px;
         border: none;
-        border-radius: 8px;
-        z-index: 999;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
       }
     </style>
   </head>
-  <body style="margin: 0; overflow: hidden;">
-    <a-scene
-      vr-mode-ui="enabled: false"
-      embedded
-      arjs="sourceType: webcam; debugUIEnabled: false;"
+  <body>
+    <model-viewer
+      id="moanaModel"
+      src="moana_3d_model.glb"
+      alt="Moana 3D Model"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      auto-rotate
+      style="width: 100%; height: 100vh;"
     >
-      <a-assets>
-        <a-asset-item id="moanaModel" src="moana_3d_model.glb"></a-asset-item>
-      </a-assets>
-
-      <!-- 3D Model -->
-      <a-entity
-        gltf-model="#moanaModel"
-        position="0 0 0"
-        scale="0.5 0.5 0.5"
-        rotation="0 180 0"
-      ></a-entity>
-
-      <a-camera-static></a-camera-static>
-    </a-scene>
-
-    <!-- Snapshot Button -->
-    <button id="captureButton">📸 Capture</button>
+      <button id="snapshot">📸 Capture</button>
+    </model-viewer>
 
     <script>
-      document.getElementById("captureButton").onclick = function () {
-        html2canvas(document.body).then(function (canvas) {
-          let link = document.createElement("a");
-          link.download = "moana-ar-snapshot.png";
-          link.href = canvas.toDataURL();
-          link.click();
+      const modelViewer = document.querySelector("#moanaModel");
+      const snapshotButton = document.querySelector("#snapshot");
+
+      snapshotButton.addEventListener("click", () => {
+        modelViewer.toBlob((blob) => {
+          const img = document.createElement("a");
+          img.href = URL.createObjectURL(blob);
+          img.download = "moana-snapshot.png";
+          img.click();
         });
-      };
+      });
     </script>
   </body>
 </html>
