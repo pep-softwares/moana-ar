@@ -2,43 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Moana Marker AR</title>
-
-    <!-- A-Frame & MindAR -->
+    <title>Moana AR on Marker</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.4/dist/aframe/mindar-aframe.prod.js"></script>
-    <!-- Snapshot tool -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-
+      body { margin: 0; overflow: hidden; }
       #snapshotBtn {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        z-index: 9999;
-        padding: 12px 18px;
-        font-size: 16px;
-        background-color: #e91e63;
+        padding: 10px 15px;
+        background: #e91e63;
         color: white;
         border: none;
         border-radius: 10px;
-        cursor: pointer;
+        font-size: 16px;
+        z-index: 999;
       }
     </style>
   </head>
 
   <body>
-    <!-- Snapshot Button -->
     <button id="snapshotBtn">📸 Capture</button>
 
-    <!-- MindAR Scene -->
     <a-scene
-      mindar-image="imageTargetSrc: mind.mind; autoStart: true;"
+      mindar-image="imageTargetSrc: mind.mind; autoStart: true"
       color-space="sRGB"
       embedded
       renderer="colorManagement: true, physicallyCorrectLights"
@@ -51,21 +41,18 @@
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <!-- Image marker target -->
       <a-entity mindar-image-target="targetIndex: 0">
         <a-gltf-model
           src="#moana"
           position="0 0 0"
-          scale="0.5 0.5 0.5"
+          scale="1 1 1"
           rotation="0 0 0"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
 
-    <!-- Snapshot Function -->
     <script>
-      const snapshotBtn = document.getElementById("snapshotBtn");
-      snapshotBtn.addEventListener("click", () => {
+      document.getElementById("snapshotBtn").addEventListener("click", () => {
         html2canvas(document.body).then((canvas) => {
           const link = document.createElement("a");
           link.download = "moana_ar_snapshot.png";
